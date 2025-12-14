@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Đăng nhập - HUY CINEMA{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="page-title">🔐 Đăng nhập</h1>
+    
+    <form method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Đăng nhập</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 1rem;">
+        Chưa có tài khoản? <a href="{{ url_for('register') }}" style="color: var(--primary);">Đăng ký ngay</a>
+    </p>
+</div>
+{% endblock %}

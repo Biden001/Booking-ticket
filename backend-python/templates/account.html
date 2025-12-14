@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Tài khoản - HUY CINEMA{% endblock %}
+
+{% block content %}
+<h1 class="page-title">👤 Tài khoản của tôi</h1>
+
+<div class="form-container" style="max-width: 600px;">
+    <h2 style="margin-bottom: 1rem;">📝 Thông tin cá nhân</h2>
+    
+    <form method="POST" action="{{ url_for('update_profile') }}">
+        <div class="form-group">
+            <label>Tên đăng nhập</label>
+            <input type="text" value="{{ user.username }}" disabled>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="full_name">Họ và tên</label>
+            <input type="text" id="full_name" name="full_name" value="{{ user.full_name or '' }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <input type="tel" id="phone" name="phone" value="{{ user.phone or '' }}">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+    </form>
+    
+    <hr style="margin: 2rem 0; border-color: #e5e5e5;">
+    
+    <h2 style="margin-bottom: 1rem;">🔒 Đổi mật khẩu</h2>
+    
+    <form method="POST" action="{{ url_for('change_password') }}">
+        <div class="form-group">
+            <label for="current_password">Mật khẩu hiện tại</label>
+            <input type="password" id="current_password" name="current_password" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="new_password">Mật khẩu mới</label>
+            <input type="password" id="new_password" name="new_password" required minlength="6">
+        </div>
+        
+        <div class="form-group">
+            <label for="confirm_password">Xác nhận mật khẩu mới</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        
+        <button type="submit" class="btn btn-warning">🔐 Đổi mật khẩu</button>
+    </form>
+</div>
+{% endblock %}

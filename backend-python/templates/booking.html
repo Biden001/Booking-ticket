@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Đặt vé - {{ movie.title }} - HUY CINEMA{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🎟️ Đặt vé xem phim</h1>
+
+<!-- Bảng đếm ngược giữ chỗ -->
+<div id="countdown-container" class="countdown-box">
+    <div class="countdown-content">
+        <span class="countdown-icon">⏱️</span>
+        <span class="countdown-label">Thời gian giữ chỗ:</span>
+        <span id="countdown-timer" class="countdown-timer">10:00</span>
+    </div>
+    <div class="countdown-warning" id="countdown-warning" style="display: none;">
+        ⚠️ Sắp hết thời gian! Vui lòng hoàn tất đặt vé.
+    </div>
+</div>
+
+<div style="text-align: center; margin-bottom: 2rem;">
+    <h2>{{ movie.title }}</h2>
+    <p>📅 {{ showtime.show_date }} - 🕐 {{ showtime.show_time }} - 🎭 {{ showtime.theater }}</p>
+    <p>💰 Giá vé: <strong style="color: var(--primary);">{{ "{:,.0f}".format(showtime.price) }} VND</strong></p>
+</div>
+
+<div class="screen">MÀN HÌNH</div>
+
+<form method="POST" action="{{ url_for('book_seat') }}" id="booking-form">
+    <input type="hidden" name="showtime_id" value="{{ showtime.id }}">
+    
+    <div class="seat-grid">
+        {% for seat in seats %}
+        <label class="seat {% if seat.status == 'booked' %}booked{% elif seat.status == 'held' and not seat.is_held_by_me %}held{% elif seat.is_held_by_me %}selected{% endif %}" data-seat-id="{{ seat.id }}">
+            <input type="checkbox" name="seat_ids" value="{{ seat.id }}" 
+                   {% if seat.status == 'booked' or (seat.status == 'held' and not seat.is_held_by_me) %}disabled{% endif %}
+                   {% if seat.is_held_by_me %}checked{% endif %}
+                   style="display: none;">
+            {{ seat.seat_number }}
+        </label>
+        {% endfor %}
+    </div>
+    
+    <div class="seat-legend">
+        <div class="legend-item">
+            <div class="legend-box" style="background: #2d5016;"></div>
+            <span>Trống</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box" style="background: var(--primary);"></div>
+            <span>Đang chọn</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box" style="background: var(--warning);"></div>
+            <span>Đang giữ</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box" style="background: var(--danger);"></div>
+            <span>Đã đặt</span>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <p id="selected-info" style="margin-bottom: 1rem;">Chưa chọn ghế nào</p>
+        <button type="submit" class="btn btn-primary" id="book-btn" disabled>🎟️ Đặt vé</button>
+        <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="btn btn-secondary">← Quay lại</a>
+    </div>
+</form>
+
+<script>
+// Showtime ID để gọi API
+const showtimeId = {{ showtime.id }};
+
+// Đếm ngược 5 phút giữ chỗ
+let timeLeft = 5 * 60; // 5 phút = 300 giây
+const timerElement = document.getElementById('countdown-timer');
+const warningElement = document.getElementById('countdown-warning');
+const countdownContainer = document.getElementById('countdown-container');
+const bookingForm = document.getElementById('booking-form');
+
+function updateCountdown() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    // Cảnh báo khi còn 2 phút
+    if (timeLeft <= 120 && timeLeft > 0) {
+        warningElement.style.display = 'block';
+        countdownContainer.classList.add('countdown-urgent');
+    }
+    
+    // Hết giờ
+    if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        timerElement.textContent = '00:00';
+        countdownContainer.classList.add('countdown-expired');
+        warningElement.innerHTML = '❌ Hết thời gian giữ chỗ! Đang chuyển hướng...';
+        warningElement.style.display = 'block';
+        
+        // Disable form
+        document.getElementById('book-btn').disabled = true;
+        document.querySelectorAll('.seat input').forEach(input => input.disabled = true);
+        
+        // Redirect sau 3 giây
+        setTimeout(() => {
+            window.location.href = "{{ url_for('movie_detail', movie_id=movie.id) }}";
+        }, 3000);
+    }
+    
+    timeLeft--;
+}
+
+const countdownInterval = setInterval(updateCountdown, 1000);
+updateCountdown(); // Chạy ngay lập tức
+
+// Xử lý chọn ghế với API giữ ghế
+const selectedInfo = document.getElementById('selected-info');
+const bookBtn = document.getElementById('book-btn');
+const price = Number("{{ showtime.price }}");
+
+// Hàm gọi API giữ ghế
+async function holdSeat(seatId) {
+    try {
+        const response = await fetch('/api/hold-seat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seat_id: seatId, showtime_id: showtimeId })
+        });
+        const data = await response.json();
+        return data.success;
+    } catch (error) {
+        console.error('Error holding seat:', error);
+        return false;
+    }
+}
+
+// Hàm gọi API bỏ giữ ghế
+async function releaseSeat(seatId) {
+    try {
+        const response = await fetch('/api/release-seat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seat_id: seatId })
+        });
+        const data = await response.json();
+        return data.success;
+    } catch (error) {
+        console.error('Error releasing seat:', error);
+        return false;
+    }
+}
+
+// Hàm cập nhật trạng thái ghế từ server
+async function refreshSeats() {
+    try {
+        const response = await fetch(`/api/get-seats/${showtimeId}`);
+        const data = await response.json();
+        
+        data.seats.forEach(seatData => {
+            const seatEl = document.querySelector(`.seat[data-seat-id="${seatData.id}"]`);
+            if (!seatEl) return;
+            
+            const checkbox = seatEl.querySelector('input');
+            
+            // Xóa tất cả class trạng thái
+            seatEl.classList.remove('booked', 'held', 'selected');
+            
+            if (seatData.status === 'booked') {
+                seatEl.classList.add('booked');
+                checkbox.disabled = true;
+                checkbox.checked = false;
+            } else if (seatData.status === 'held' && !seatData.is_held_by_me) {
+                seatEl.classList.add('held');
+                checkbox.disabled = true;
+                checkbox.checked = false;
+            } else if (seatData.is_held_by_me) {
+                seatEl.classList.add('selected');
+                checkbox.disabled = false;
+                checkbox.checked = true;
+            } else {
+                // available
+                checkbox.disabled = false;
+            }
+        });
+        
+        updateInfo();
+    } catch (error) {
+        console.error('Error refreshing seats:', error);
+    }
+}
+
+// Xử lý click ghế
+document.querySelectorAll('.seat').forEach(seat => {
+    seat.addEventListener('click', async function(e) {
+        if (this.classList.contains('booked') || this.classList.contains('held')) {
+            return; // Không cho phép click ghế đã đặt hoặc người khác giữ
+        }
+        
+        const checkbox = this.querySelector('input');
+        const seatId = this.dataset.seatId;
+        
+        if (checkbox.checked) {
+            // Đang chọn -> bỏ chọn
+            const success = await releaseSeat(seatId);
+            if (success) {
+                checkbox.checked = false;
+                this.classList.remove('selected');
+            }
+        } else {
+            // Chưa chọn -> chọn
+            const success = await holdSeat(seatId);
+            if (success) {
+                checkbox.checked = true;
+                this.classList.add('selected');
+            } else {
+                alert('Ghế đã được người khác chọn trước. Đang cập nhật...');
+                refreshSeats();
+            }
+        }
+        
+        updateInfo();
+    });
+});
+
+function updateInfo() {
+    const selected = document.querySelectorAll('.seat.selected');
+    if (selected.length > 0) {
+        const seatNames = Array.from(selected).map(s => s.textContent.trim()).join(', ');
+        const total = selected.length * price;
+        selectedInfo.innerHTML = `Ghế: <strong>${seatNames}</strong> | Tổng: <strong>${total.toLocaleString('vi-VN')} VND</strong>`;
+        bookBtn.disabled = false;
+    } else {
+        selectedInfo.textContent = 'Chưa chọn ghế nào';
+        bookBtn.disabled = true;
+    }
+}
+
+// Tự động cập nhật trạng thái ghế mỗi 1 giây
+setInterval(refreshSeats, 1000);
+
+// Cập nhật info ban đầu
+updateInfo();
+</script>
+{% endblock %}

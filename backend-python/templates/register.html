@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Đăng ký - HUY CINEMA{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="page-title">📝 Đăng ký tài khoản</h1>
+    
+    <form method="POST" action="{{ url_for('register') }}">
+        <div class="form-group">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" name="username" required minlength="3">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="full_name">Họ và tên</label>
+            <input type="text" id="full_name" name="full_name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Số điện thoại</label>
+            <input type="tel" id="phone" name="phone">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" name="password" required minlength="6">
+        </div>
+        
+        <div class="form-group">
+            <label for="confirm_password">Xác nhận mật khẩu</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Đăng ký</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 1rem;">
+        Đã có tài khoản? <a href="{{ url_for('login') }}" style="color: var(--primary);">Đăng nhập</a>
+    </p>
+</div>
+{% endblock %}

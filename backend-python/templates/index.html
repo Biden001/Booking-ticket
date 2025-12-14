@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}HUY CINEMA - Trang chủ{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🎬 Phim đang chiếu</h1>
+
+<form class="search-box" action="{{ url_for('search') }}" method="GET">
+    <input type="text" name="q" placeholder="Tìm kiếm phim..." value="{{ query or '' }}">
+    <button type="submit" class="btn btn-primary">🔍 Tìm</button>
+</form>
+
+{% if query %}
+    <p style="text-align: center; margin-bottom: 1rem;">
+        Kết quả tìm kiếm cho: "<strong>{{ query }}</strong>" ({{ movies|length }} phim)
+    </p>
+{% endif %}
+
+<div class="movie-grid">
+    {% for movie in movies %}
+    <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="movie-card">
+        <img src="{{ movie.poster_url or url_for('static', filename='images/default.jpg') }}" 
+             alt="{{ movie.title }}"
+             onerror="this.style.display='none'">
+        <div class="movie-info">
+            <h3>{{ movie.title }}</h3>
+            <p>{{ movie.genre or 'Chưa cập nhật' }}</p>
+        </div>
+    </a>
+    {% else %}
+    <p style="text-align: center; grid-column: 1/-1;">Không có phim nào.</p>
+    {% endfor %}
+</div>
+{% endblock %}

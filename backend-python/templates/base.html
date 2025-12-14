@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HUY CINEMA{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="{{ url_for('index') }}" class="logo">🎬 HUY CINEMA</a>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Trang chủ</a>
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('my_bookings') }}">Vé của tôi</a>
+                    <a href="{{ url_for('account') }}">Tài khoản</a>
+                    {% if session.get('is_admin') %}
+                        <a href="{{ url_for('admin') }}" class="admin-link">Admin</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="btn-logout">Đăng xuất</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Đăng nhập</a>
+                    <a href="{{ url_for('register') }}">Đăng ký</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 HUY CINEMA - Hệ thống đặt vé xem phim trực tuyến</p>
+    </footer>
+</body>
+</html>

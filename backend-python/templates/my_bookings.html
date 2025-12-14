@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Vé của tôi - HUY CINEMA{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🎟️ Vé đã đặt</h1>
+
+{% if bookings %}
+<div class="booking-list">
+    {% for booking in bookings %}
+    <div class="booking-item">
+        <img src="{{ booking.poster_url or url_for('static', filename='images/default.jpg') }}" 
+             alt="{{ booking.title }}"
+             onerror="this.style.display='none'">
+        <div class="booking-details">
+            <h3>{{ booking.title }}</h3>
+            <p><strong>🎭 Rạp:</strong> {{ booking.theater }}</p>
+            <p><strong>📅 Ngày:</strong> {{ booking.show_date }}</p>
+            <p><strong>🕐 Giờ:</strong> {{ booking.show_time }}</p>
+            <p><strong>💺 Ghế:</strong> {{ booking.seat_number }}</p>
+            <p><strong>💰 Giá:</strong> {{ "{:,.0f}".format(booking.price or 0) }} VND</p>
+            <p class="{% if booking.status == 'confirmed' %}status-confirmed{% elif booking.status == 'cancelled' %}status-cancelled{% elif booking.status == 'expired' %}status-expired{% else %}status-pending{% endif %}">
+                <strong>Trạng thái:</strong> 
+                {% if booking.status == 'confirmed' %}✅ Đã xác nhận
+                {% elif booking.status == 'cancelled' %}❌ Đã hủy
+                {% elif booking.status == 'expired' %}⌛ Đã hết hạn
+                {% else %}⏳ Đang xử lý{% endif %}
+            </p>
+            <p><strong>🕐 Đặt lúc:</strong> {{ booking.booking_time }}</p>
+            
+            {% if booking.status == 'confirmed' %}
+            <form method="POST" action="{{ url_for('cancel_booking', booking_id=booking.id) }}" style="margin-top: 0.5rem;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn hủy vé này?')">
+                    ❌ Hủy vé
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p style="text-align: center;">Bạn chưa đặt vé nào. <a href="{{ url_for('index') }}" style="color: var(--primary);">Đặt vé ngay!</a></p>
+{% endif %}
+{% endblock %}

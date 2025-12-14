@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }} - HUY CINEMA{% endblock %}
+
+{% block content %}
+<div class="movie-detail">
+    <img src="{{ movie.poster_url or url_for('static', filename='images/default.jpg') }}" 
+         alt="{{ movie.title }}"
+         onerror="this.style.display='none'">
+    
+    <div>
+        <h1>{{ movie.title }}</h1>
+        <p><strong>🎭 Thể loại:</strong> {{ movie.genre or 'Chưa cập nhật' }}</p>
+        <p><strong>⏱️ Thời lượng:</strong> {{ movie.duration or 'N/A' }} phút</p>
+        <p><strong>🎬 Đạo diễn:</strong> {{ movie.director or 'Chưa cập nhật' }}</p>
+        <p><strong>🌟 Diễn viên:</strong> {{ movie.cast_members or 'Chưa cập nhật' }}</p>
+        <p><strong>📝 Mô tả:</strong> {{ movie.description or 'Chưa có mô tả' }}</p>
+
+        {% if movie.trailer_url %}
+        <div class="trailer-embed" style="margin: 1.5rem 0;">
+            <iframe src="{{ movie.trailer_url }}" title="Trailer {{ movie.title }}" allowfullscreen loading="lazy" style="width: 100%; max-width: 720px; aspect-ratio: 16 / 9; border: 1px solid #e5e5e5; border-radius: 10px;"></iframe>
+        </div>
+        {% endif %}
+        
+        <h2 style="margin-top: 2rem; color: var(--primary);">🎬 Suất chiếu</h2>
+        
+        {% if showtimes %}
+        <div class="showtime-list">
+            {% for showtime in showtimes %}
+            <a href="{{ url_for('booking', showtime_id=showtime.id) }}" class="showtime-btn">
+                📅 {{ showtime.show_date }} - 🕐 {{ showtime.show_time }}<br>
+                <small>{{ showtime.theater }}</small>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="margin-top: 1rem;">Chưa có suất chiếu nào.</p>
+        {% endif %}
+        
+        <a href="{{ url_for('index') }}" class="btn btn-secondary" style="margin-top: 2rem;">← Quay lại</a>
+    </div>
+</div>
+{% endblock %}
