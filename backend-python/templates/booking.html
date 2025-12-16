@@ -1,26 +1,26 @@
 {% extends "base.html" %}
 
-{% block title %}Đặt vé - {{ movie.title }} - HUY CINEMA{% endblock %}
+{% block title %}Đặt vé - {{ movie.title }} - CINEMA{% endblock %}
 
 {% block content %}
-<h1 class="page-title">🎟️ Đặt vé xem phim</h1>
+<h1 class="page-title">Đặt vé xem phim</h1>
 
 <!-- Bảng đếm ngược giữ chỗ -->
 <div id="countdown-container" class="countdown-box">
     <div class="countdown-content">
-        <span class="countdown-icon">⏱️</span>
+        <span class="countdown-icon"></span>
         <span class="countdown-label">Thời gian giữ chỗ:</span>
         <span id="countdown-timer" class="countdown-timer">10:00</span>
     </div>
     <div class="countdown-warning" id="countdown-warning" style="display: none;">
-        ⚠️ Sắp hết thời gian! Vui lòng hoàn tất đặt vé.
+        Sắp hết thời gian! Vui lòng hoàn tất đặt vé.
     </div>
 </div>
 
 <div style="text-align: center; margin-bottom: 2rem;">
     <h2>{{ movie.title }}</h2>
-    <p>📅 {{ showtime.show_date }} - 🕐 {{ showtime.show_time }} - 🎭 {{ showtime.theater }}</p>
-    <p>💰 Giá vé: <strong style="color: var(--primary);">{{ "{:,.0f}".format(showtime.price) }} VND</strong></p>
+    <p>{{ showtime.show_date }} - {{ showtime.show_time }} - {{ showtime.theater }}</p>
+    <p>Giá vé: <strong style="color: var(--primary);">{{ "{:,.0f}".format(showtime.price) }} VND</strong></p>
 </div>
 
 <div class="screen">MÀN HÌNH</div>
@@ -61,7 +61,7 @@
     
     <div style="text-align: center; margin-top: 2rem;">
         <p id="selected-info" style="margin-bottom: 1rem;">Chưa chọn ghế nào</p>
-        <button type="submit" class="btn btn-primary" id="book-btn" disabled>🎟️ Đặt vé</button>
+        <button type="submit" class="btn btn-primary" id="book-btn" disabled>Đặt vé</button>
         <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="btn btn-secondary">← Quay lại</a>
     </div>
 </form>
@@ -93,7 +93,7 @@ function updateCountdown() {
         clearInterval(countdownInterval);
         timerElement.textContent = '00:00';
         countdownContainer.classList.add('countdown-expired');
-        warningElement.innerHTML = '❌ Hết thời gian giữ chỗ! Đang chuyển hướng...';
+        warningElement.innerHTML = 'Hết thời gian giữ chỗ! Đang chuyển hướng...';
         warningElement.style.display = 'block';
         
         // Disable form

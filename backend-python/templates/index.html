@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}HUY CINEMA - Trang chủ{% endblock %}
+{% block title %}CINEMA - Trang chủ{% endblock %}
 
 {% block content %}
-<h1 class="page-title">🎬 Phim đang chiếu</h1>
+<h1 class="page-title">Phim đang chiếu</h1>
 
 <form class="search-box" action="{{ url_for('search') }}" method="GET">
     <input type="text" name="q" placeholder="Tìm kiếm phim..." value="{{ query or '' }}">
-    <button type="submit" class="btn btn-primary">🔍 Tìm</button>
+    <button type="submit" class="btn btn-primary">Tìm</button>
 </form>
 
 {% if query %}

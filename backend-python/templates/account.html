@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Tài khoản - HUY CINEMA{% endblock %}
+{% block title %}Tài khoản - CINEMA{% endblock %}
 
 {% block content %}
-<h1 class="page-title">👤 Tài khoản của tôi</h1>
+<h1 class="page-title">Tài khoản của tôi</h1>
 
 <div class="form-container" style="max-width: 600px;">
-    <h2 style="margin-bottom: 1rem;">📝 Thông tin cá nhân</h2>
+    <h2 style="margin-bottom: 1rem;">Thông tin cá nhân</h2>
     
     <form method="POST" action="{{ url_for('update_profile') }}">
         <div class="form-group">
@@ -29,12 +29,12 @@
             <input type="tel" id="phone" name="phone" value="{{ user.phone or '' }}">
         </div>
         
-        <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
     </form>
     
     <hr style="margin: 2rem 0; border-color: #e5e5e5;">
     
-    <h2 style="margin-bottom: 1rem;">🔒 Đổi mật khẩu</h2>
+    <h2 style="margin-bottom: 1rem;">Đổi mật khẩu</h2>
     
     <form method="POST" action="{{ url_for('change_password') }}">
         <div class="form-group">
@@ -52,7 +52,7 @@
             <input type="password" id="confirm_password" name="confirm_password" required>
         </div>
         
-        <button type="submit" class="btn btn-warning">🔐 Đổi mật khẩu</button>
+        <button type="submit" class="btn btn-warning">Đổi mật khẩu</button>
     </form>
 </div>
 {% endblock %}

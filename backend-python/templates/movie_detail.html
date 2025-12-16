@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ movie.title }} - HUY CINEMA{% endblock %}
+{% block title %}{{ movie.title }} - CINEMA{% endblock %}
 
 {% block content %}
 <div class="movie-detail">
@@ -10,11 +10,11 @@
     
     <div>
         <h1>{{ movie.title }}</h1>
-        <p><strong>🎭 Thể loại:</strong> {{ movie.genre or 'Chưa cập nhật' }}</p>
-        <p><strong>⏱️ Thời lượng:</strong> {{ movie.duration or 'N/A' }} phút</p>
-        <p><strong>🎬 Đạo diễn:</strong> {{ movie.director or 'Chưa cập nhật' }}</p>
-        <p><strong>🌟 Diễn viên:</strong> {{ movie.cast_members or 'Chưa cập nhật' }}</p>
-        <p><strong>📝 Mô tả:</strong> {{ movie.description or 'Chưa có mô tả' }}</p>
+        <p><strong>Thể loại:</strong> {{ movie.genre or 'Chưa cập nhật' }}</p>
+        <p><strong>Thời lượng:</strong> {{ movie.duration or 'N/A' }} phút</p>
+        <p><strong>Đạo diễn:</strong> {{ movie.director or 'Chưa cập nhật' }}</p>
+        <p><strong>Diễn viên:</strong> {{ movie.cast_members or 'Chưa cập nhật' }}</p>
+        <p><strong>Mô tả:</strong> {{ movie.description or 'Chưa có mô tả' }}</p>
 
         {% if movie.trailer_url %}
         <div class="trailer-embed" style="margin: 1.5rem 0;">
@@ -22,13 +22,13 @@
         </div>
         {% endif %}
         
-        <h2 style="margin-top: 2rem; color: var(--primary);">🎬 Suất chiếu</h2>
+        <h2 style="margin-top: 2rem; color: var(--primary);">Suất chiếu</h2>
         
         {% if showtimes %}
         <div class="showtime-list">
             {% for showtime in showtimes %}
             <a href="{{ url_for('booking', showtime_id=showtime.id) }}" class="showtime-btn">
-                📅 {{ showtime.show_date }} - 🕐 {{ showtime.show_time }}<br>
+                {{ showtime.show_date }} - {{ showtime.show_time }}<br>
                 <small>{{ showtime.theater }}</small>
             </a>
             {% endfor %}

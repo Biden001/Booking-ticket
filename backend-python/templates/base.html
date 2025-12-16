@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}HUY CINEMA{% endblock %}</title>
+    <title>{% block title %}CINEMA{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header>
         <nav class="navbar">
-            <a href="{{ url_for('index') }}" class="logo">🎬 HUY CINEMA</a>
+            <a href="{{ url_for('index') }}" class="logo">CINEMA</a>
             <div class="nav-links">
                 <a href="{{ url_for('index') }}">Trang chủ</a>
                 {% if session.get('user_id') %}
@@ -41,7 +41,7 @@
     </main>
 
     <footer>
-        <p>© 2025 HUY CINEMA - Hệ thống đặt vé xem phim trực tuyến</p>
+        <p>© 2025 CINEMA - Hệ thống đặt vé xem phim trực tuyến</p>
     </footer>
 </body>
 </html>

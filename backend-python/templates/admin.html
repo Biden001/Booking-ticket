@@ -1,45 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}Admin - HUY CINEMA{% endblock %}
+{% block title %}Admin - CINEMA{% endblock %}
 
 {% block content %}
-<h1 class="page-title">⚙️ Quản trị hệ thống</h1>
+<h1 class="page-title">Quản trị hệ thống</h1>
 
 <!-- Thống kê tổng quan -->
 <div class="stats-overview" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
     <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 15px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
         <div style="font-size: 2.5rem; font-weight: bold;">{{ stats.tong_phim }}</div>
-        <div style="opacity: 0.9;">🎬 Tổng phim</div>
+        <div style="opacity: 0.9;">Tổng phim</div>
     </div>
     <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 15px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);">
         <div style="font-size: 2.5rem; font-weight: bold;">{{ stats.tong_suat_chieu }}</div>
-        <div style="opacity: 0.9;">🕐 Suất chiếu</div>
+        <div style="opacity: 0.9;">Suất chiếu</div>
     </div>
     <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 1.5rem; border-radius: 15px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);">
         <div style="font-size: 2.5rem; font-weight: bold;">{{ stats.tong_ve_dat }}</div>
-        <div style="opacity: 0.9;">🎟️ Vé đã đặt</div>
+        <div style="opacity: 0.9;">Vé đã đặt</div>
     </div>
     <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 1.5rem; border-radius: 15px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(67, 233, 123, 0.4);">
         <div style="font-size: 2.5rem; font-weight: bold;">{{ "{:,.0f}".format(stats.tong_doanh_thu) }}</div>
-        <div style="opacity: 0.9;">💰 Doanh thu (VND)</div>
+        <div style="opacity: 0.9;">Doanh thu (VND)</div>
     </div>
     <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 1.5rem; border-radius: 15px; color: white; text-align: center; box-shadow: 0 4px 15px rgba(250, 112, 154, 0.4);">
         <div style="font-size: 2.5rem; font-weight: bold;">{{ stats.tong_khach_hang }}</div>
-        <div style="opacity: 0.9;">👥 Khách hàng</div>
+        <div style="opacity: 0.9;">Khách hàng</div>
     </div>
 </div>
 
 <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('movies')">🎬 Phim</button>
-    <button class="tab-btn" onclick="showTab('showtimes')">🕐 Suất chiếu</button>
-    <button class="tab-btn" onclick="showTab('bookings')">🎟️ Đặt vé</button>
-    <button class="tab-btn" onclick="showTab('users')">👥 Người dùng</button>
-    <button class="tab-btn" onclick="showTab('revenue')">📊 Doanh thu</button>
+    <button class="tab-btn active" onclick="showTab('movies')">Phim</button>
+    <button class="tab-btn" onclick="showTab('showtimes')">Suất chiếu</button>
+    <button class="tab-btn" onclick="showTab('bookings')">Đặt vé</button>
+    <button class="tab-btn" onclick="showTab('users')">Người dùng</button>
+    <button class="tab-btn" onclick="showTab('revenue')">Doanh thu</button>
 </div>
 
 <!-- Tab Doanh thu - Top 10 phim -->
 <div id="revenue" class="tab-content">
-    <h2 style="color: #000;">📊 Top 10 Phim Doanh Thu Cao Nhất</h2>
+    <h2 style="color: #000;">Top 10 Phim Doanh Thu Cao Nhất</h2>
     
     <table class="admin-table" style="margin-top: 1rem;">
         <thead>
@@ -55,21 +55,13 @@
             {% for phim in top_phim %}
             <tr>
                 <td style="text-align: center; font-size: 1.5rem; font-weight: bold;">
-                    {% if loop.index == 1 %}
-                        🥇
-                    {% elif loop.index == 2 %}
-                        🥈
-                    {% elif loop.index == 3 %}
-                        🥉
-                    {% else %}
-                        {{ loop.index }}
-                    {% endif %}
+                    {{ loop.index }}
                 </td>
                 <td>
                     {% if phim.poster_url %}
                         <img src="{{ phim.poster_url }}" alt="{{ phim.title }}" style="width: 60px; height: 90px; object-fit: cover; border-radius: 5px;">
                     {% else %}
-                        <div style="width: 60px; height: 90px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center;">🎬</div>
+                        <div style="width: 60px; height: 90px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center;">-</div>
                     {% endif %}
                 </td>
                 <td style="font-weight: 500;">{{ phim.title }}</td>
@@ -105,7 +97,7 @@
     <h2 style="color: #000;">Quản lý phim</h2>
     
     <form method="POST" action="{{ url_for('admin_add_movie') }}" style="margin: 1rem 0; padding: 1rem; background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 10px;">
-        <h3 style="margin-bottom: 1rem; color: #000;">➕ Thêm phim mới</h3>
+        <h3 style="margin-bottom: 1rem; color: #000;">Thêm phim mới</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
             <input type="text" name="title" placeholder="Tên phim" required style="padding: 0.75rem; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #000;">
             <input type="text" name="genre" placeholder="Thể loại" style="padding: 0.75rem; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #000;">
@@ -116,7 +108,7 @@
             <input type="url" name="trailer_url" placeholder="URL trailer (YouTube embed)" style="padding: 0.75rem; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #000;">
         </div>
         <textarea name="description" placeholder="Mô tả" rows="2" style="width: 100%; margin-top: 1rem; padding: 0.75rem; background: #ffffff; border: 1px solid #ddd; border-radius: 5px; color: #000;"></textarea>
-        <button type="submit" class="btn btn-success" style="margin-top: 1rem;">➕ Thêm phim</button>
+        <button type="submit" class="btn btn-success" style="margin-top: 1rem;">Thêm phim</button>
     </form>
     
     <table class="admin-table">
@@ -141,9 +133,9 @@
                 <td>{{ movie.director or '-' }}</td>
                 <td>{{ movie.cast_members or '-' }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary" onclick="openEditModal({{ movie.id }}, '{{ movie.title|e }}', '{{ movie.genre|e if movie.genre else '' }}', {{ movie.duration or 0 }}, '{{ movie.poster_url|e if movie.poster_url else '' }}', '{{ movie.trailer_url|e if movie.trailer_url else '' }}', '{{ movie.description|e if movie.description else '' }}', '{{ movie.director|e if movie.director else '' }}', '{{ movie.cast_members|e if movie.cast_members else '' }}')">✏️</button>
+                    <button type="button" class="btn btn-primary" onclick="openEditModal({{ movie.id }}, '{{ movie.title|e }}', '{{ movie.genre|e if movie.genre else '' }}', {{ movie.duration or 0 }}, '{{ movie.poster_url|e if movie.poster_url else '' }}', '{{ movie.trailer_url|e if movie.trailer_url else '' }}', '{{ movie.description|e if movie.description else '' }}', '{{ movie.director|e if movie.director else '' }}', '{{ movie.cast_members|e if movie.cast_members else '' }}')">Sửa</button>
                     <form method="POST" action="{{ url_for('admin_delete_movie', movie_id=movie.id) }}" style="display: inline;">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa phim này?')">🗑️</button>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa phim này?')">Xóa</button>
                     </form>
                 </td>
             </tr>
@@ -156,7 +148,7 @@
 <div id="editMovieModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;">
     <div style="background: #ffffff; max-width: 600px; margin: 2rem auto; padding: 2rem; border-radius: 15px; position: relative; border: 1px solid #e0e0e0; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
         <button onclick="closeEditModal()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #333; font-size: 1.5rem; cursor: pointer;">✕</button>
-        <h2 style="margin-bottom: 1.5rem; color: var(--primary);">✏️ Sửa thông tin phim</h2>
+        <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Sửa thông tin phim</h2>
         <form method="POST" action="" id="editMovieForm">
             <div style="display: grid; gap: 1rem;">
                 <input type="hidden" name="movie_id" id="edit_movie_id">
@@ -195,7 +187,7 @@
                     <textarea name="description" id="edit_description" rows="3" style="width: 100%; padding: 0.75rem; background: #ffffff; border: 1px solid #ddd; border-radius: 5px; color: #000;"></textarea>
                 </div>
                 <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                    <button type="submit" class="btn btn-success" style="flex: 1;">💾 Lưu thay đổi</button>
+                    <button type="submit" class="btn btn-success" style="flex: 1;">Lưu thay đổi</button>
                     <button type="button" onclick="closeEditModal()" class="btn btn-secondary" style="flex: 1;">Hủy</button>
                 </div>
             </div>
@@ -208,7 +200,7 @@
     <h2>Quản lý suất chiếu</h2>
     
     <form method="POST" action="{{ url_for('admin_add_showtime') }}" style="margin: 1rem 0; padding: 1rem; background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 10px;">
-        <h3 style="margin-bottom: 1rem; color: #000;">➕ Thêm suất chiếu</h3>
+        <h3 style="margin-bottom: 1rem; color: #000;">Thêm suất chiếu</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
             <select name="movie_id" required style="padding: 0.75rem; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #000;">
                 <option value="">-- Chọn phim --</option>
@@ -221,7 +213,7 @@
             <input type="time" name="show_time" required style="padding: 0.75rem; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #000;">
             <input type="number" name="price" placeholder="Giá vé" value="75000" required style="padding: 0.75rem; background: #fff; border: 1px solid #ddd; border-radius: 5px; color: #000;">
         </div>
-        <button type="submit" class="btn btn-success" style="margin-top: 1rem;">➕ Thêm suất chiếu</button>
+        <button type="submit" class="btn btn-success" style="margin-top: 1rem;">Thêm suất chiếu</button>
     </form>
     
     <table class="admin-table">
@@ -247,7 +239,7 @@
                 <td>{{ "{:,.0f}".format(st.price) }} VND</td>
                 <td>
                     <form method="POST" action="{{ url_for('admin_delete_showtime', showtime_id=st.id) }}" style="display: inline;">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa suất chiếu này?')">🗑️</button>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Xóa suất chiếu này?')">Xóa</button>
                     </form>
                 </td>
             </tr>
@@ -282,19 +274,19 @@
                 <td>{{ b.show_date }}</td>
                 <td>
                     {% if b.status == 'confirmed' %}
-                        <span style="color: var(--success);">✅ Xác nhận</span>
+                        <span style="color: var(--success);">Xác nhận</span>
                     {% elif b.status == 'cancelled' %}
-                        <span style="color: var(--danger);">❌ Đã hủy</span>
+                        <span style="color: var(--danger);">Đã hủy</span>
                     {% elif b.status == 'expired' %}
-                        <span style="color: #6c757d;">⌛ Hết hạn</span>
+                        <span style="color: #6c757d;">Hết hạn</span>
                     {% else %}
-                        <span style="color: var(--warning);">⏳ Chờ</span>
+                        <span style="color: var(--warning);">Chờ</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if b.status == 'confirmed' %}
                     <form method="POST" action="{{ url_for('admin_cancel_booking', booking_id=b.id) }}" style="display: inline;">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Hủy đặt vé này?')">❌</button>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Hủy đặt vé này?')">Hủy</button>
                     </form>
                     {% endif %}
                 </td>
